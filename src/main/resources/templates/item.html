@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Index</title>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="/" class="navbar-brand" style="text-decoration:none;">
+                    <img th:src="@{/images/spring_boot.png}" class="img-rounded"
+                         style="display:inline-block;height:100%;margin-right:5px"/>
+                    <span style="vertical-align:middle;">SpringBoot Community Web</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container">
+    <div class="page-header">
+        <h1>게시글 확인</h1>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th style="padding:13px 0 0 15px">게시판 종류</th>
+            <td th:text="${board.boardType.name() == 'notice'} ? '공지사항' : '자유게시판'"></td>
+        </tr>
+        <tr>
+            <th style="padding:13px 0 0 15px;">생성날짜</th>
+            <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board?.createdDate}"></td>
+        </tr>
+        <tr>
+            <th style="padding:13px 0 0 15px;">제목</th>
+            <td th:text="${board.title}"></td>
+        </tr>
+        <tr>
+            <th style="padding:13px 0 0 15px;">부제목</th>
+            <td th:text="${board?.subTitle}"></td>
+        </tr>
+        <tr>
+            <th style="padding:13px 0 0 15px;">내용</th>
+            <td th:text="${board.content}"></td>
+        </tr>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

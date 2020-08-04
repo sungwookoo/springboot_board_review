@@ -30,6 +30,9 @@ public class Board implements Serializable {
     @Column
     private String writer;
 
+    @Column
+    private String content;
+
     @Column(updatable = false)
     private LocalDateTime createdDat;
 
@@ -37,9 +40,10 @@ public class Board implements Serializable {
     private Long views;
 
     @Builder
-    public Board(String title, String writer, LocalDateTime createdDat,Long views){
+    public Board(String title, String writer, String content, LocalDateTime createdDat,Long views){
         this.title = title;
         this.writer = writer;
+        this.content = content;
         this.createdDat = createdDat;
         this.views = views;
     }
