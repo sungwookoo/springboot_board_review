@@ -9,15 +9,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+
 @Getter
 @Setter
 
 @Entity
 @Table
 public class Board implements Serializable {
-
-    public Board() {
-    }
 
     @Id
     @Column
@@ -33,19 +32,23 @@ public class Board implements Serializable {
     @Column
     private String content;
 
-    @Column(updatable = false)
+    @Column
     private LocalDateTime createdDat;
 
     @Column
     private Long views;
 
+    @Column
+    private String password;
+
     @Builder
-    public Board(String title, String writer, String content, LocalDateTime createdDat,Long views){
+    public Board(String title, String writer, String content, LocalDateTime createdDat,Long views,String password){
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.createdDat = createdDat;
         this.views = views;
+        this.password = password;
     }
 
 }

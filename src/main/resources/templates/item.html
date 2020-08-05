@@ -28,26 +28,28 @@
 
     <table class="table">
         <tr>
-            <th style="padding:13px 0 0 15px">게시판 종류</th>
-            <td th:text="${board.boardType.name() == 'notice'} ? '공지사항' : '자유게시판'"></td>
-        </tr>
-        <tr>
-            <th style="padding:13px 0 0 15px;">생성날짜</th>
-            <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board?.createdDate}"></td>
+            <th style="padding:13px 0 0 15px;">작성일</th>
+            <td th:text="${board.createdDat} ? ${#temporals.format(board.createdDat,'yyyy-MM-dd HH:mm')} : ${board?.createdDat}"></td>
         </tr>
         <tr>
             <th style="padding:13px 0 0 15px;">제목</th>
             <td th:text="${board.title}"></td>
         </tr>
         <tr>
-            <th style="padding:13px 0 0 15px;">부제목</th>
-            <td th:text="${board?.subTitle}"></td>
+            <th style="padding:13px 0 0 15px;">작성자</th>
+            <td th:text="${board.writer}"></td>
         </tr>
-        <tr>
+        <tr >
             <th style="padding:13px 0 0 15px;">내용</th>
-            <td th:text="${board.content}"></td>
+            <td style="white-space:pre;" th:text="${board.content}"></td>
+<!--            <textarea th:inline="text" class="form-control" rows="3" readonly="readonly">[[*{board.content}]]</textarea>-->
         </tr>
     </table>
+    <div style="width:120px;margin:10px 0;">
+        <a href="#" th:href="@{'/edit/'+${board.idx}}" class="btn btn-dark btn-block">수정</a>
+        <a href="#" th:href="@{'/delete/'+${board.idx}}" class="btn btn-dark btn-block">삭제</a>
+        <a href="#" th:href="@{'/'}" class="btn btn-dark btn-block">목록</a>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

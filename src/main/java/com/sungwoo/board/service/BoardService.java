@@ -34,9 +34,15 @@ public class BoardService {
     public Board findBoardByIdx(Long idx) {
         return boardRepository.findById(idx).orElse(new Board());
     }
-
     public void deleteBoard(Board board){
         boardRepository.delete(board);
+    }
+
+    public int checkPassword(Board board,long idx){
+        if(board.getPassword().equals(boardRepository.getOne(idx).getPassword()))
+            return 1;
+        else
+            return 0;
     }
 
 }
