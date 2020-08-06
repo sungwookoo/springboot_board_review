@@ -27,6 +27,7 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
+
     public Board saveBoard(Board board) {
         return boardRepository.save(board);
     }
@@ -43,6 +44,11 @@ public class BoardService {
             return 1;
         else
             return 0;
+    }
+
+    public void saveFileId(Board board,Long fileId){
+        if(board.getFileId()!=null)board.setFileId(fileId);
+        boardRepository.save(board);
     }
 
 }

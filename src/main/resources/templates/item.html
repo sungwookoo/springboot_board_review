@@ -12,7 +12,7 @@
         <div class="container">
             <div class="navbar-header">
                 <a href="/" class="navbar-brand" style="text-decoration:none;">
-                    <img th:src="@{/images/spring_boot.png}" class="img-rounded"
+                    <img th:src="@{/images/haha.png}" class="img-rounded"
                          style="display:inline-block;height:100%;margin-right:5px"/>
                     <span style="vertical-align:middle;">SpringBoot Community Web</span>
                 </a>
@@ -44,6 +44,11 @@
             <td style="white-space:pre;" th:text="${board.content}"></td>
 <!--            <textarea th:inline="text" class="form-control" rows="3" readonly="readonly">[[*{board.content}]]</textarea>-->
         </tr>
+        <div th:if="${board.fileId != null}">
+            <tr>
+                <th style="padding:13px 0 0 15px;">첨부파일 <a class = "card-text" th:href="@{'/download/'+${board.fileId}}" th:text="${filename}"></a></th>
+            </tr>
+        </div>
     </table>
     <div style="width:120px;margin:10px 0;">
         <a href="#" th:href="@{'/edit/'+${board.idx}}" class="btn btn-dark btn-block">수정</a>

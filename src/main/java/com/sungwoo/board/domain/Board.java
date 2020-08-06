@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,32 +24,42 @@ public class Board implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String writer;
 
-    @Column
+    @Column(nullable = false)
     private String content;
 
     @Column
     private LocalDateTime createdDat;
 
     @Column
+    @ColumnDefault("0")
     private Long views;
 
     @Column
     private String password;
 
+    @Column
+    private Long fileId;
+
     @Builder
-    public Board(String title, String writer, String content, LocalDateTime createdDat,Long views,String password){
+    public Board(String title, String writer, String content, LocalDateTime createdDat, Long views, String password, Long fileId){
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.createdDat = createdDat;
         this.views = views;
         this.password = password;
+        this.fileId = fileId;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        this.views=this.views==null?0:this.views;
     }
 
 }
