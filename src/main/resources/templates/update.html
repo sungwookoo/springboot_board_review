@@ -29,7 +29,7 @@
     <div class="page-header">
         <h1>게시글 작성</h1>
     </div>
-    <form action="#" th:action="@{/update/{idx}(idx=${board.idx})}" th:object="${board}" method="post">
+    <form action="#" th:action="@{/update/{idx}(idx=${board.idx})}" th:object="${board}" method="post" enctype="multipart/form-data">
         <div class="form-group row">
             <label for="title" class="col-sm-2 col-form-label">제목</label>
             <div class="col-sm-10">
@@ -50,15 +50,25 @@
                 <textarea name="content" class="form-control" rows="12" id="content" placeholder="내용">[[*{content}]]</textarea>
             </div>
         </div>
+        <!--<div class="form-group row">
+            <label for="inputFile" class="col-sm-2 col-form-label">첨부 파일</label>
+            <div class="col-sm-10">
+                <div class="custom-file" id="inputFile">
+                    <a class = "card-text" th:href="@{'/download/'+${board.fileId}}" th:text="${filename}">
+                    <input name="file" type="file" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
+                </div>
+            </div>
+        </div>-->
         <div class="form-group row">
             <label for="password" class="col-sm-2 col-form-label">암호</label>
             <div class="col-sm-10">
-                <input th:field="*{password}" type="password" maxlength="10" class="form-control" id="password" placeholder="비밀번호">
-<!--                비밀번호 검사 어떻게하지-->
+                <input th:field="*{password}" type="password" maxlength="10" class="form-control" id="password" placeholder="암호(최대 10자)">
             </div>
         </div>
+        <input th:field="*{views}" type="hidden" id="views" th:value="${currentviews}">
         <br><br><br>
-        <input type="submit" value="수정">
+        <input class="btn btn-primary" type="submit" value="수정">
 
     </form>
 </div>
@@ -72,5 +82,10 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script>
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
 </body>
 </html>

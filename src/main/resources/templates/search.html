@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Search</title>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="/" class="navbar-brand" style="text-decoration:none;">
+                    <img th:src="@{/images/home.jpeg}" th:width="100" th:height="100" class="img-rounded"
+                         style="display:inline-block;height:100%;margin-right:30px;margin-bottom:40px"/>
+                    <span class="display-3" style=" color:dimgray; font-weight: bolder;">Home</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container" style="color: green;">
+    <div class="page-header">
+        <h1>검색 결과</h1>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성 일시</th>
+            <th>조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board : ${boardList2}">
+            <td th:text="${board.idx}"></td>
+            <td><a href="#" th:href="@{'/' + ${board.idx}}" th:text="${board.title}"></a></td>
+            <td th:text="${board.writer}"></td>
+            <td th:text="${board.createdDat} ? ${#temporals.format(board.createdDat,'yyyy-MM-dd HH:mm')} : ${board.createdDat}"></td>
+            <td th:text="${board.views}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <!-- search{s} -->
+    <form action="#" th:action="@{/search}" th:object="${board}" method="GET">
+        <div style="positon: absolute; left: 0px; bottom: 600px;">
+            <td valgn="top">
+                <select name="searchcon">
+                    <option value="제목">제목</option>
+                </select>
+            </td>
+            <input name="keyword" type="text" placeholder="검색어를 입력해주세요">&nbsp;<button>검색</button>
+        </div>
+    </form>
+    <!-- search{e} -->
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

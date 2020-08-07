@@ -26,6 +26,8 @@
 <div class="container">
     <div class="page-header">
         <h1>게시글 목록</h1>
+        <br>
+        <p>총 <span th:text="${boardCount}"></span>개의 게시글</p>
     </div>
     <div class="pull-right" style="width:100px;margin:10px 0;">
         <a href="#" th:href="@{/new}" class="btn btn-primary btn-block">등록</a>

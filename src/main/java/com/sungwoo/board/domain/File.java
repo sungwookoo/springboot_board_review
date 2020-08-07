@@ -16,17 +16,17 @@ public class File {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false,updatable = false)
     private String origFilename;
 
-    @Column(nullable = false)
+    @Column(nullable = false,updatable = false)
     private String filename;
 
-    @Column(nullable = false)
+    @Column(nullable = false,updatable = false)
     private String filePath;
 
     @Builder
-    public File(Long id, String origFilename, String filename, String filePath) {
+    public File(Long id,String origFilename, String filename, String filePath) {
         this.id = id;
         this.origFilename = origFilename;
         this.filename = filename;

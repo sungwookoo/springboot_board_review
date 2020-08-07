@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,9 +47,18 @@ public class BoardService {
             return 0;
     }
 
-    public void saveFileId(Board board,Long fileId){
-        if(board.getFileId()!=null)board.setFileId(fileId);
-        boardRepository.save(board);
+    public List<Board> searchPosts(String keyword) {
+        List<Board> boardList2 = boardRepository.findByTitleContaining(keyword);
+        List<Board> boardList = new ArrayList<>();
+
+        if(boardList.isEmpty()) return boardList2;
+
+        for(Board board : boardList2) {
+            boardList.add(board);
+            if(board.getTitle().contains(keyword))
+                return boardList;
+        }
+        return boardList;
     }
 
 }

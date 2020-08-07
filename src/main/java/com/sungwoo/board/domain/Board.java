@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 
 @Entity
+@DynamicUpdate
 @Table
 public class Board implements Serializable {
 
@@ -24,13 +26,13 @@ public class Board implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
-    @Column(nullable = false)
+    @Column
     private String title;
 
-    @Column(nullable = false)
+    @Column
     private String writer;
 
-    @Column(nullable = false)
+    @Column
     private String content;
 
     @Column
@@ -43,16 +45,15 @@ public class Board implements Serializable {
     @Column
     private String password;
 
-    @Column
+    @Column(updatable = false)
     private Long fileId;
 
     @Builder
-    public Board(String title, String writer, String content, LocalDateTime createdDat, Long views, String password, Long fileId){
+    public Board(String title, String writer, String content, LocalDateTime createdDat, String password, Long fileId){
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.createdDat = createdDat;
-        this.views = views;
         this.password = password;
         this.fileId = fileId;
     }

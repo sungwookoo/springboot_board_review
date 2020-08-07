@@ -49,10 +49,10 @@ public class BoardController {
     public String list(@PageableDefault Pageable pageable, Model model) {
         //@PageableDefault 어노테이션은 페이징의 size, sort 를 사용할 수 있게 해주고 page= 로 특정할수있게 해준다.
         model.addAttribute("boardList",boardService.findBoardList(pageable));
+        long boardCount = boardService.findBoardList().size();
+        model.addAttribute("boardCount",boardCount);
         return "index";
     }
-
-
 
     @PostMapping("/add")
     public String add(Board board, Model model, @RequestParam("file")MultipartFile files){
@@ -97,22 +97,28 @@ public class BoardController {
     @GetMapping("/{idx}")
     public String read(@PathVariable Long idx, Model model){
         String origFilename = fileService.getFile(boardService.findBoardByIdx(idx).getFileId()).getOrigFilename();
+
         long views = boardService.findBoardByIdx(idx).getViews();
         boardService.findBoardByIdx(idx).setViews(views+1);
         boardService.saveBoard(boardService.findBoardByIdx(idx));
+
         model.addAttribute("filename",origFilename);
         model.addAttribute("board", boardService.findBoardByIdx(idx));
         return "item";
     }
     @GetMapping("/edit/{idx}")
     public String showUpdateForm(@PathVariable("idx") long idx, Model model){
+        if(boardService.findBoardByIdx(idx).getFileId()!=null){
+            String origFilepath = fileService.getFile(boardService.findBoardByIdx(idx).getFileId()).getFilePath();
+            model.addAttribute("filepath",origFilepath);
+        }
         Board board = boardService.findBoardByIdx(idx);
-            model.addAttribute("board", board);
-            return "update";
+        model.addAttribute("board", board);
+        return "update";
     }
 
     @PostMapping("/update/{idx}")
-    public String updateBoard(@PathVariable("idx") long idx, @Validated Board board, BindingResult result, Model model, HttpServletResponse response) throws IOException {
+    public String updateBoard(@PathVariable("idx") long idx, @Validated Board board, BindingResult result, Model model, HttpServletResponse response/*, MultipartFile files*/) throws IOException {
         //@Validated는 바인딩할 객체필드를 검증하기위해 사용
         //BindingResult는 Validator를 상속받는 클래스에서 객체값을 검증
         if(result.hasErrors()) {
@@ -120,6 +126,39 @@ public class BoardController {
             return "update";
         }
 
+       /* try {
+            String origFilename = files.getOriginalFilename();
+            String filename = new MD5Generator(origFilename).toString();
+            model.addAttribute("filename",origFilename);
+
+            *//* 실행되는 위치의 'files' 폴더에 파일이 저장됩니다. *//*
+            String savePath = System.getProperty("user.dir") + "\\files";
+
+            *//* 파일이 저장되는 폴더가 없으면 폴더를 생성합니다. *//*
+            if (!new java.io.File(savePath).exists()) {
+                try {
+                    new java.io.File(savePath).mkdir();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+            String filePath = savePath + "\\" + filename;
+            files.transferTo(new File(filePath));
+            FileDto fileDto = new FileDto();
+            fileDto.setOrigFilename(origFilename);
+            fileDto.setFilename(filename);
+            fileDto.setFilePath(filePath);
+            Long fileId = fileService.saveFile(fileDto);
+            board.setFileId(fileId);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }*/
+
+        long views = boardService.findBoardByIdx(idx).getViews();
+        model.addAttribute("currentviews",views);
+
+        //패스워드 체크
         int check = boardService.checkPassword(board,idx);
         if(check==0) {
             response.setContentType("text/html; charset=UTF-8");
@@ -131,12 +170,16 @@ public class BoardController {
             out.close();
             return "null";
         }
+
+            board.prePersist();
+
             board.setCreatedDat(LocalDateTime.now());
             boardService.saveBoard(board);
             List<Board> boardList = boardService.findBoardList();
             model.addAttribute("boardList", boardList);
             return "item";
     }
+
     @GetMapping("/download/{fileId}")
     public ResponseEntity<InputStreamResource> fileDownload(@PathVariable("fileId") Long fileId, HttpServletRequest req, HttpServletResponse res) throws IOException {
         FileDto fileDto = fileService.getFile(fileId);
@@ -160,6 +203,31 @@ public class BoardController {
         model.addAttribute("boardList",boardService.findBoardList(pageable));
         return "index";
     }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value = "keyword") String keyword, Model model,
+                         //@PageableDefault Pageable pageable,
+                         HttpServletResponse response) throws IOException {
+        List<Board> kewordCk = boardService.searchPosts(keyword);
+        if(kewordCk.isEmpty()) {
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('검색 결과 없음');");
+            out.println("history.back();");
+            out.println("</script>");
+            out.close();
+            return "null";
+        }
+        boardService.searchPosts(keyword);
+        //List<Board> boardList = boardService.findBoardList();
+        List<Board> boardList2 = boardService.searchPosts(keyword);
+        //model.addAttribute("boardList", boardService.findBoardList(pageable));
+        model.addAttribute("boardList2", boardService.searchPosts(keyword));
+        return "search";
+    }
+
+
 
 //----------인코딩-------------
     public String getBrowser(HttpServletRequest req) {
